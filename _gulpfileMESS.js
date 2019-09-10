@@ -1,8 +1,11 @@
-const gulp = require('gulp');
+var gulp        = require('gulp');
+var browserSync = require('browser-sync').create();
+var reload      = browserSync.reload;
+// const gulp = require('gulp');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const cssmin = require('gulp-cssmin');
-const browserSync = require('browser-sync').create();
+// const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
 const minify = require('gulp-minify');
 const rename = require('gulp-rename');
@@ -87,27 +90,41 @@ gulp.task('img-compression', function() {
 });
 
 // Live Server
-gulp.task('live-server', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./dist",
-      directory: true
-    },
-    notify: false
-  });
+// gulp.task('live-server', function() {
+//   browserSync.init({
+//     server: {
+//       baseDir: "./dist",
+//       directory: false
+//     },
+//     notify: false
+//   });
 
-  gulp.watch("**/*", {cwd: './dist/'}, browserSync.reload);
-});
+
+
+    
+
+  
 
 // Watch on everything
-gulp.task('mdb-go', gulp.series('live-server'), function(done) {
+// gulp.task('mdb-go', gulp.series('live-server'), function(done) {
+// Watch scss AND html files, doing different things with each.
+gulp.task('serve', function () {
   gulp.watch("scss/**/*.scss", ['css-compile']);
   gulp.watch(["dist/css/*.css", "!dist/css/*.min.css"], ['css-minify']);
   gulp.watch("js/**/*.js", ['js-build']);
   gulp.watch(["dist/js/*.js", "!dist/js/*.min.js"], ['js-minify']);
   gulp.watch("**/*", {cwd: './img/'}, ['img-compression']);
   // gulp.watch("**/*.html").on("change", reload);
+  // gulp.watch("**/*", {cwd: './dist/'}, browserSync.reload);});
+  // Serve files from the root of this project
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+  gulp.watch("*.html").on("change", reload);
 });
+
 
 function getJSModules() {
   delete require.cache[require.resolve('./js/modules.js')];
