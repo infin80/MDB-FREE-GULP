@@ -106,7 +106,7 @@ gulp.task('mdb-go', gulp.series('live-server'), function(done) {
   gulp.watch("js/**/*.js", ['js-build']);
   gulp.watch(["dist/js/*.js", "!dist/js/*.min.js"], ['js-minify']);
   gulp.watch("**/*", {cwd: './img/'}, ['img-compression']);
-  gulp.watch(paths.templates + '/**/*.html').on("change", reload);
+  gulp.watch("/**/*.html").on("change", reload);
 });
 
 function getJSModules() {
